@@ -7,6 +7,7 @@ import user.User;
 import utils.OutputHandler;
 import utils.Utils;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static utils.Constants.BUY_PREMIUM_ACCOUNT_FEATURE;
@@ -80,52 +81,72 @@ public final class PlatformActions {
       return;
     }
 
-
+    // check if the logged out page was accessed
     if (nextPage.equals(LOGOUT_PAGE)) {
       PlatformEngine.getEngine().setCurrentUser(null);
       PlatformEngine.getEngine().setCurrentPage(LOGGED_OUT_HOMEPAGE);
+
+      ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
+
+      currentMoviesList.clear();
+      PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
+
       return;
     }
 
-    if (currentPage.equals(MOVIES_PAGE) && nextPage.equals(SEE_DETAILS_PAGE)) {
-      String selectedMovieName = currentAction.getMovie();
-      Movie SelectedMovie = Utils.findMovie(selectedMovieName);
+    if ((currentPage.equals(LOGGED_IN_HOMEPAGE)
+        && !(nextPage.equals(MOVIES_PAGE) || nextPage.equals(UPGRADES_PAGE)))
 
-      if (SelectedMovie == null) {
+        || (currentPage.equals(MOVIES_PAGE)
+        && !(nextPage.equals(LOGGED_IN_HOMEPAGE) || nextPage.equals(SEE_DETAILS_PAGE)))
+
+        || (currentPage.equals(SEE_DETAILS_PAGE)
+        && !(nextPage.equals(LOGGED_IN_HOMEPAGE) || nextPage.equals(MOVIES_PAGE)
+        || nextPage.equals(UPGRADES_PAGE)))
+
+        || (currentPage.equals(UPGRADES_PAGE)
+        && !(nextPage.equals(LOGGED_IN_HOMEPAGE) || nextPage.equals(MOVIES_PAGE)))) {
+
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
+
+    // check if the see details page was accessed
+    if (nextPage.equals(SEE_DETAILS_PAGE)) {
+      // check if the selected movie exists in the CurrentMoviesList
+      String selectedMovieName = currentAction.getMovie();
+      Movie selectedMovie = Utils.findMovie(selectedMovieName);
+      if (selectedMovie == null) {
         OutputHandler.updateOutput(ERROR_STATUS);
         return;
       }
 
-      ArrayList<Movie> currentMoviesList = new ArrayList<>();
-      currentMoviesList.add(SelectedMovie);
+      // update the currentMoviesList and the current page
+      ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
+
+      currentMoviesList.clear();
+      currentMoviesList.add(selectedMovie);
+
       PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
+
       PlatformEngine.getEngine().setCurrentPage(nextPage);
-
       OutputHandler.updateOutput(SUCCESS_STATUS);
-    }
-
-    if (currentPage.equals(LOGGED_IN_HOMEPAGE) && !(nextPage.equals(MOVIES_PAGE)
-        || nextPage.equals(UPGRADES_PAGE))) {
-      OutputHandler.updateOutput(ERROR_STATUS);
       return;
     }
 
-    if (currentPage.equals(MOVIES_PAGE) && !(nextPage.equals(LOGGED_IN_HOMEPAGE)
-        || nextPage.equals(SEE_DETAILS_PAGE))) {
-      OutputHandler.updateOutput(ERROR_STATUS);
+    if (nextPage.equals(MOVIES_PAGE)) {
+      ArrayList<Movie> moviesDatabase = PlatformEngine.getEngine().getMoviesDatabase();
+      PlatformEngine.getEngine().setCurrentMoviesList(moviesDatabase);
+
+      PlatformEngine.getEngine().setCurrentPage(nextPage);
+      OutputHandler.updateOutput(SUCCESS_STATUS);
       return;
     }
 
-    if (currentPage.equals(SEE_DETAILS_PAGE) && !(nextPage.equals(LOGGED_IN_HOMEPAGE)
-        || nextPage.equals(MOVIES_PAGE) || nextPage.equals(UPGRADES_PAGE))) {
-      OutputHandler.updateOutput(ERROR_STATUS);
-      return;
-    }
-
-    if (currentPage.equals(UPGRADES_PAGE) && !(nextPage.equals(LOGGED_IN_HOMEPAGE)
-        || nextPage.equals(MOVIES_PAGE))) {
-      OutputHandler.updateOutput(ERROR_STATUS);
-      return;
+    if (!PlatformEngine.getEngine().getCurrentMoviesList().isEmpty()) {
+      ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
+      currentMoviesList.clear();
+      PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
     }
 
     PlatformEngine.getEngine().setCurrentPage(nextPage);
@@ -185,7 +206,20 @@ public final class PlatformActions {
   }
 
   private static void search() {
+    ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
+    currentMoviesList.clear();
 
+    String startsWith = currentAction.getStartsWith();
+
+    ArrayList<Movie> moviesDatabase = PlatformEngine.getEngine().getMoviesDatabase();
+    for (Movie movie : moviesDatabase) {
+      if (movie.getName().startsWith(startsWith)) {
+        currentMoviesList.add(movie);
+      }
+    }
+
+    PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
+    OutputHandler.updateOutput(SUCCESS_STATUS);
   }
 
   private static void filter() {

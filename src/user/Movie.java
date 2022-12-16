@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import static utils.Constants.*;
 
-public class Movie {
+public final class Movie {
   private String name;
   private int year;
   private int duration;
@@ -13,7 +13,7 @@ public class Movie {
   private ArrayList<String> countriesBanned;
 
   private int numLikes = INITIAL_LIKES;
-  private double rating = INITIAL_RATING;
+  private int rating = INITIAL_RATING;
   private int numRatings = INITIAL_NUM_RATINGS;
 
 
@@ -84,11 +84,11 @@ public class Movie {
     this.numLikes = numLikes;
   }
 
-  public double getRating() {
+  public int getRating() {
     return rating;
   }
 
-  public void setRating(final double rating) {
+  public void setRating(final int rating) {
     this.rating = rating;
   }
 
