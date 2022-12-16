@@ -41,9 +41,11 @@ public final class Utils {
   public static Movie findMovie(final String selectedMovieName) {
     ArrayList<Movie> moviesDatabase = PlatformEngine.getEngine().getMoviesDatabase();
 
-    for (Movie movie : moviesDatabase)
-      if (movie.getName().equals(selectedMovieName))
+    for (Movie movie : moviesDatabase) {
+      if (movie.getName().equals(selectedMovieName)) {
         return movie;
+      }
+    }
 
     return null;
   }
@@ -52,5 +54,17 @@ public final class Utils {
     ArrayList<Movie> currentMoviesList = new ArrayList<>();
     PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
     PlatformEngine.getEngine().setCurrentPage(LOGGED_OUT_HOMEPAGE);
+  }
+
+  public static User findUser(final String name) {
+    ArrayList<User> usersDatabase = PlatformEngine.getEngine().getUsersDatabase();
+
+    for (User user : usersDatabase) {
+      if (user.getName().equals(name)) {
+        return user;
+      }
+    }
+
+    return null;
   }
 }

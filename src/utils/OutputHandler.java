@@ -23,9 +23,15 @@ public final class OutputHandler {
     ObjectNode outputNode = mapper.createObjectNode();
     if (status == ERROR_STATUS) {
       outputNode.put("error", "Error");
-    } else {
-      outputNode.set("error", null);
+      outputNode.set("currentUser", null);
+      outputNode.set("currentMoviesList", new ArrayNode(null));
+
+      ArrayNode output = PlatformEngine.getEngine().getOutput();
+      output.addAll(List.of(outputNode));
+      return;
     }
+
+    outputNode.set("error", null);
 
     ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
     ArrayNode currentMoviesOutput = mapper.createArrayNode();
@@ -92,7 +98,7 @@ public final class OutputHandler {
     credentialsObjectNode.put("password", user.getPassword());
     credentialsObjectNode.put("accountType", user.getAccountType());
     credentialsObjectNode.put("country", user.getCountry());
-    credentialsObjectNode.put("balance", user.getBalance());
+    credentialsObjectNode.put("balance", Integer.toString(user.getBalance()));
 
     userObjectNode.set("credentials", credentialsObjectNode);
 
