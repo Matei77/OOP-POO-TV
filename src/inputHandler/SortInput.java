@@ -8,7 +8,7 @@ public final class SortInput {
     return rating;
   }
 
-  public void setRating(String rating) {
+  public void setRating(final String rating) {
     this.rating = rating;
   }
 
@@ -16,7 +16,7 @@ public final class SortInput {
     return duration;
   }
 
-  public void setDuration(String duration) {
+  public void setDuration(final String duration) {
     this.duration = duration;
   }
 }

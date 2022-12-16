@@ -11,7 +11,7 @@ public final class CredentialsInput {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     this.name = name;
   }
 
@@ -19,7 +19,7 @@ public final class CredentialsInput {
     return password;
   }
 
-  public void setPassword(String password) {
+  public void setPassword(final String password) {
     this.password = password;
   }
 
@@ -27,7 +27,7 @@ public final class CredentialsInput {
     return accountType;
   }
 
-  public void setAccountType(String accountType) {
+  public void setAccountType(final String accountType) {
     this.accountType = accountType;
   }
 
@@ -35,7 +35,7 @@ public final class CredentialsInput {
     return country;
   }
 
-  public void setCountry(String country) {
+  public void setCountry(final String country) {
     this.country = country;
   }
 
@@ -43,7 +43,7 @@ public final class CredentialsInput {
     return balance;
   }
 
-  public void setBalance(int balance) {
+  public void setBalance(final int balance) {
     this.balance = balance;
   }
 }

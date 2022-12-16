@@ -7,7 +7,7 @@ public final class UserInput {
     return credentials;
   }
 
-  public void setCredentials(CredentialsInput credentials) {
+  public void setCredentials(final CredentialsInput credentials) {
     this.credentials = credentials;
   }
 }

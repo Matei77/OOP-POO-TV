@@ -10,7 +10,7 @@ public final class ContainsInput {
     return actors;
   }
 
-  public void setActors(ArrayList<String> actors) {
+  public void setActors(final ArrayList<String> actors) {
     this.actors = actors;
   }
 
@@ -18,7 +18,7 @@ public final class ContainsInput {
     return genre;
   }
 
-  public void setGenre(ArrayList<String> genres) {
+  public void setGenre(final ArrayList<String> genres) {
     this.genre = genres;
   }
 }
