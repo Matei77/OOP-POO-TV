@@ -23,7 +23,7 @@ public final class PlatformEngine {
 
   private User currentUser;
   private ArrayList<Movie> currentMoviesList;
-  private String currentPage = LOGGED_OUT_HOMEPAGE;
+  private String currentPage;
 
 
   private PlatformEngine() { }
@@ -36,9 +36,9 @@ public final class PlatformEngine {
   }
 
   public void runEngine() {
-    Utils.setDatabases(inputData, moviesDatabase, usersDatabase);
-    ArrayList<ActionInput> actions = inputData.getActions();
-    PlatformActions.executeActions(actions);
+    Utils.setStartingState();
+    Utils.setDatabases();
+    PlatformActions.executeActions(inputData.getActions());
   }
 
   public Input getInputData() {
