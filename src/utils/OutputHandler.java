@@ -3,9 +3,7 @@ package utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import engine.PlatformActions;
 import engine.PlatformEngine;
-import inputHandler.ActionInput;
 import user.Movie;
 import user.User;
 
@@ -14,9 +12,9 @@ import java.util.List;
 
 import static utils.Constants.ERROR_STATUS;
 
-public final class ErrorHandler {
+public final class OutputHandler {
 
-  private ErrorHandler() {
+  private OutputHandler() {
   }
 
   public static void updateOutput(final int status) {
@@ -83,7 +81,11 @@ public final class ErrorHandler {
   }
 
   private static ObjectNode createUserOutput(final ObjectMapper mapper, final User user) {
+
     ObjectNode userObjectNode = mapper.createObjectNode();
+    if (user == null) {
+      return null;
+    }
 
     ObjectNode credentialsObjectNode = mapper.createObjectNode();
     credentialsObjectNode.put("name", user.getName());
