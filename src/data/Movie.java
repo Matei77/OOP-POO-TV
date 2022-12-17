@@ -44,6 +44,23 @@ public final class Movie {
     this.countriesBanned = countriesBanned;
   }
 
+  /**
+   * Update the rating of the movie.
+   *
+   * @param newRating a new rating from a user for the movie.
+   */
+  public void updateRating(final int newRating) {
+    double ratingSum = 0;
+    ratings.add(newRating);
+
+    for (Integer userRating : ratings) {
+      ratingSum += userRating;
+    }
+
+    numRatings++;
+    rating = ratingSum / numRatings;
+  }
+
   public String getName() {
     return name;
   }

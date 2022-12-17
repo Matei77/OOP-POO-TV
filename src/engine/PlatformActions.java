@@ -478,18 +478,9 @@ public final class PlatformActions {
       ratedMovies.add(selectedMovie);
       currentUser.setRatedMovies(ratedMovies);
 
-      double ratingSum = 0;
-      ArrayList<Integer> ratings = selectedMovie.getRatings();
-      ratings.add(currentAction.getRate());
-
-      for (Integer rating : ratings) {
-        ratingSum += rating;
-      }
-
-      selectedMovie.setRatings(ratings);
-      selectedMovie.setNumRatings(selectedMovie.getNumRatings() + 1);
-      selectedMovie.setRating(ratingSum / selectedMovie.getNumRatings());
+      selectedMovie.updateRating(currentAction.getRate());
     }
+
     OutputHandler.updateOutput(SUCCESS_STATUS);
   }
 
