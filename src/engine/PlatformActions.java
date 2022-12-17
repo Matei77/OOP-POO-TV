@@ -4,11 +4,14 @@ import inputHandler.ActionInput;
 import inputHandler.CredentialsInput;
 import user.Movie;
 import user.User;
+import utils.DurationMovieComparator;
 import utils.OutputHandler;
+import utils.RatingMovieComparator;
 import utils.Utils;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import static utils.Constants.BUY_PREMIUM_ACCOUNT_FEATURE;
 import static utils.Constants.BUY_TOKENS_FEATURE;
@@ -135,8 +138,19 @@ public final class PlatformActions {
     }
 
     if (nextPage.equals(MOVIES_PAGE)) {
+      ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
+      currentMoviesList.clear();
+
       ArrayList<Movie> moviesDatabase = PlatformEngine.getEngine().getMoviesDatabase();
-      PlatformEngine.getEngine().setCurrentMoviesList(moviesDatabase);
+      String userCountry = PlatformEngine.getEngine().getCurrentUser().getCountry();
+
+      for (Movie movie : moviesDatabase) {
+        if (!movie.getCountriesBanned().contains(userCountry)) {
+          currentMoviesList.add(movie);
+        }
+      }
+
+      PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
 
       PlatformEngine.getEngine().setCurrentPage(nextPage);
       OutputHandler.updateOutput(SUCCESS_STATUS);
@@ -206,14 +220,22 @@ public final class PlatformActions {
   }
 
   private static void search() {
+    if (!PlatformEngine.getEngine().getCurrentPage().equals(MOVIES_PAGE)) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
+
     ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
     currentMoviesList.clear();
 
     String startsWith = currentAction.getStartsWith();
 
     ArrayList<Movie> moviesDatabase = PlatformEngine.getEngine().getMoviesDatabase();
+    String userCountry = PlatformEngine.getEngine().getCurrentUser().getCountry();
+
     for (Movie movie : moviesDatabase) {
-      if (movie.getName().startsWith(startsWith)) {
+      if (movie.getName().startsWith(startsWith)
+          && !movie.getCountriesBanned().contains(userCountry)) {
         currentMoviesList.add(movie);
       }
     }
@@ -223,7 +245,55 @@ public final class PlatformActions {
   }
 
   private static void filter() {
+    if (!PlatformEngine.getEngine().getCurrentPage().equals(MOVIES_PAGE)) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
 
+    ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
+    currentMoviesList.clear();
+
+    ArrayList<Movie> moviesDatabase = PlatformEngine.getEngine().getMoviesDatabase();
+    String userCountry = PlatformEngine.getEngine().getCurrentUser().getCountry();
+
+    if (currentAction.getFilters().getContains() != null) {
+      ArrayList<String> actors;
+      ArrayList<String> genres;
+
+      if (currentAction.getFilters().getContains().getActors() != null) {
+        actors = new ArrayList<>(currentAction.getFilters().getContains().getActors());
+      } else {
+        actors = new ArrayList<>();
+      }
+
+      if (currentAction.getFilters().getContains().getGenre() != null) {
+        genres = new ArrayList<>(currentAction.getFilters().getContains().getGenre());
+      } else {
+        genres = new ArrayList<>();
+      }
+
+      for (Movie movie : moviesDatabase) {
+        if (movie.getActors().containsAll(actors) &&
+            movie.getGenres().containsAll(genres) &&
+            !movie.getCountriesBanned().contains(userCountry)) {
+          currentMoviesList.add(movie);
+        }
+      }
+      if (currentAction.getFilters().getSort() != null) {
+        if (currentAction.getFilters().getSort().getRating() != null) {
+          Comparator<Movie> ratingMovieComparator = new RatingMovieComparator();
+          currentMoviesList.sort(ratingMovieComparator);
+        }
+
+        if (currentAction.getFilters().getSort().getDuration() != null) {
+          Comparator<Movie> durationMovieComparator = new DurationMovieComparator();
+          currentMoviesList.sort(durationMovieComparator);
+        }
+      }
+    }
+
+    PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
+    OutputHandler.updateOutput(SUCCESS_STATUS);
   }
 
   private static void buyTokens() {
