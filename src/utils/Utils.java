@@ -6,6 +6,7 @@ import input.MovieInput;
 import input.UserInput;
 import data.Movie;
 import data.User;
+import pages.LoggedOutHomepage;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ public final class Utils {
   public static void setStartingState() {
     ArrayList<Movie> currentMoviesList = new ArrayList<>();
     PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
-    PlatformEngine.getEngine().setCurrentPage(LOGGED_OUT_HOMEPAGE);
+    PlatformEngine.getEngine().setCurrentPage(new LoggedOutHomepage());
     PlatformEngine.getEngine().setCurrentUser(null);
   }
 

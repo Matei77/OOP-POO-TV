@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.Input;
 import data.Movie;
 import data.User;
+import pages.Page;
 import utils.Utils;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public final class PlatformEngine {
 
   private User currentUser;
   private ArrayList<Movie> currentMoviesList;
-  private String currentPage;
+  private Page currentPage;
 
 
   private PlatformEngine() { }
@@ -72,14 +73,6 @@ public final class PlatformEngine {
     this.currentUser = currentUser;
   }
 
-  public String getCurrentPage() {
-    return currentPage;
-  }
-
-  public void setCurrentPage(final String currentPage) {
-    this.currentPage = currentPage;
-  }
-
   public ArrayList<Movie> getMoviesDatabase() {
     return moviesDatabase;
   }
@@ -102,5 +95,13 @@ public final class PlatformEngine {
 
   public void setCurrentMoviesList(final ArrayList<Movie> currentMoviesList) {
     this.currentMoviesList = currentMoviesList;
+  }
+
+  public Page getCurrentPage() {
+    return currentPage;
+  }
+
+  public void setCurrentPage(final Page currentPage) {
+    this.currentPage = currentPage;
   }
 }
