@@ -15,6 +15,7 @@ public final class Movie {
   private int numLikes = INITIAL_LIKES;
   private int rating = INITIAL_RATING;
   private int numRatings = INITIAL_NUM_RATINGS;
+  private ArrayList<Integer> ratings = new ArrayList<>();
 
 
   public Movie(final String name, final int year, final int duration,
@@ -98,5 +99,13 @@ public final class Movie {
 
   public void setNumRatings(final int numRatings) {
     this.numRatings = numRatings;
+  }
+
+  public ArrayList<Integer> getRatings() {
+    return ratings;
+  }
+
+  public void setRatings(final ArrayList<Integer> ratings) {
+    this.ratings = ratings;
   }
 }

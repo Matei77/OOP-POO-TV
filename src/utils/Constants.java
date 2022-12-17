@@ -9,6 +9,12 @@ public final class Constants {
   public static final int INITIAL_RATING = 0;
   public static final int INITIAL_NUM_RATINGS = 0;
 
+  public static final int PREMIUM_ACCOUNT_PRICE = 10;
+  public static final int MOVIE_PRICE = 2;
+
+  public static final String STANDARD_ACCOUNT = "standard";
+  public static final String PREMIUM_ACCOUNT = "premium";
+
   public static final String LOGGED_OUT_HOMEPAGE = "logged out homepage";
   public static final String LOGIN_PAGE = "login";
   public static final String REGISTER_PAGE = "register";

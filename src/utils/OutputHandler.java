@@ -108,28 +108,32 @@ public final class OutputHandler {
     ArrayNode purchasedMoviesOutput = mapper.createArrayNode();
     ArrayList<Movie> purchasedMovies = user.getPurchasedMovies();
     for (Movie movie : purchasedMovies) {
-      purchasedMoviesOutput.add(movie.getName());
+      ObjectNode movieObjectNode = createMovieOutput(mapper, movie);
+      purchasedMoviesOutput.add(movieObjectNode);
     }
     userObjectNode.set("purchasedMovies", purchasedMoviesOutput);
 
     ArrayNode watchedMoviesOutput = mapper.createArrayNode();
     ArrayList<Movie> watchedMovies = user.getWatchedMovies();
     for (Movie movie : watchedMovies) {
-      watchedMoviesOutput.add(movie.getName());
+      ObjectNode movieObjectNode = createMovieOutput(mapper, movie);
+      watchedMoviesOutput.add(movieObjectNode);
     }
     userObjectNode.set("watchedMovies", watchedMoviesOutput);
 
     ArrayNode likedMoviesOutput = mapper.createArrayNode();
     ArrayList<Movie> likedMovies = user.getLikedMovies();
     for (Movie movie : likedMovies) {
-      likedMoviesOutput.add(movie.getName());
+      ObjectNode movieObjectNode = createMovieOutput(mapper, movie);
+      likedMoviesOutput.add(movieObjectNode);
     }
     userObjectNode.set("likedMovies", likedMoviesOutput);
 
     ArrayNode ratedMoviesOutput = mapper.createArrayNode();
     ArrayList<Movie> ratedMovies = user.getRatedMovies();
     for (Movie movie : ratedMovies) {
-      ratedMoviesOutput.add(movie.getName());
+      ObjectNode movieObjectNode = createMovieOutput(mapper, movie);
+      ratedMoviesOutput.add(movieObjectNode);
     }
     userObjectNode.set("ratedMovies", ratedMoviesOutput);
 

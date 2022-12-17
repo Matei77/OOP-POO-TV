@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import static utils.Constants.FREE_MOVIES;
 import static utils.Constants.INITIAL_TOKENS;
 
-public class User {
+public final class User {
   private String name;
   private String password;
   private String accountType;
@@ -14,8 +14,6 @@ public class User {
 
   private int numFreePremiumMovies = FREE_MOVIES;
   private int tokensCount = INITIAL_TOKENS;
-
-  private Movie currentMovie;
 
   private ArrayList<Movie> purchasedMovies;
   private ArrayList<Movie> watchedMovies;
@@ -29,6 +27,10 @@ public class User {
     this.accountType = accountType;
     this.country = country;
     this.balance = balance;
+    purchasedMovies = new ArrayList<>();
+    watchedMovies = new ArrayList<>();
+    likedMovies = new ArrayList<>();
+    ratedMovies = new ArrayList<>();
   }
 
   public String getName() {
@@ -85,14 +87,6 @@ public class User {
 
   public void setTokensCount(final int tokensCount) {
     this.tokensCount = tokensCount;
-  }
-
-  public Movie getCurrentMovie() {
-    return currentMovie;
-  }
-
-  public void setCurrentMovie(final Movie currentMovie) {
-    this.currentMovie = currentMovie;
   }
 
   public ArrayList<Movie> getPurchasedMovies() {

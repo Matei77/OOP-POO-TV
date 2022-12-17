@@ -13,28 +13,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import static utils.Constants.BUY_PREMIUM_ACCOUNT_FEATURE;
-import static utils.Constants.BUY_TOKENS_FEATURE;
-import static utils.Constants.CHANGE_PAGE;
-import static utils.Constants.ERROR_STATUS;
-import static utils.Constants.FILTER_FEATURE;
-import static utils.Constants.LIKE_FEATURE;
-import static utils.Constants.LOGGED_IN_HOMEPAGE;
-import static utils.Constants.LOGGED_OUT_HOMEPAGE;
-import static utils.Constants.LOGIN_FEATURE;
-import static utils.Constants.LOGIN_PAGE;
-import static utils.Constants.LOGOUT_PAGE;
-import static utils.Constants.MOVIES_PAGE;
-import static utils.Constants.ON_PAGE;
-import static utils.Constants.PURCHASE_FEATURE;
-import static utils.Constants.RATE_FEATURE;
-import static utils.Constants.REGISTER_FEATURE;
-import static utils.Constants.REGISTER_PAGE;
-import static utils.Constants.SEARCH_FEATURE;
-import static utils.Constants.SEE_DETAILS_PAGE;
-import static utils.Constants.SUCCESS_STATUS;
-import static utils.Constants.UPGRADES_PAGE;
-import static utils.Constants.WATCH_FEATURE;
+import static utils.Constants.*;
 
 public final class PlatformActions {
 
@@ -257,28 +236,45 @@ public final class PlatformActions {
     String userCountry = PlatformEngine.getEngine().getCurrentUser().getCountry();
 
     if (currentAction.getFilters().getContains() != null) {
-      ArrayList<String> actors;
-      ArrayList<String> genres;
+      ArrayList<String> actors = currentAction.getFilters().getContains().getActors();
+      ArrayList<String> genres = currentAction.getFilters().getContains().getGenre();
 
-      if (currentAction.getFilters().getContains().getActors() != null) {
-        actors = new ArrayList<>(currentAction.getFilters().getContains().getActors());
+      if (actors == null && genres == null) {
+        for (Movie movie : moviesDatabase) {
+          if (!movie.getCountriesBanned().contains(userCountry)) {
+            currentMoviesList.add(movie);
+          }
+        }
+      } else if (actors == null) {
+        for (Movie movie : moviesDatabase) {
+          if (movie.getGenres().containsAll(genres) &&
+              !movie.getCountriesBanned().contains(userCountry)) {
+            currentMoviesList.add(movie);
+          }
+        }
+      } else if (genres == null) {
+        for (Movie movie : moviesDatabase) {
+          if (movie.getActors().containsAll(actors) &&
+              !movie.getCountriesBanned().contains(userCountry)) {
+            currentMoviesList.add(movie);
+          }
+        }
       } else {
-        actors = new ArrayList<>();
-      }
-
-      if (currentAction.getFilters().getContains().getGenre() != null) {
-        genres = new ArrayList<>(currentAction.getFilters().getContains().getGenre());
-      } else {
-        genres = new ArrayList<>();
-      }
-
-      for (Movie movie : moviesDatabase) {
-        if (movie.getActors().containsAll(actors) &&
-            movie.getGenres().containsAll(genres) &&
-            !movie.getCountriesBanned().contains(userCountry)) {
-          currentMoviesList.add(movie);
+        for (Movie movie : moviesDatabase) {
+          if (movie.getActors().containsAll(actors) && movie.getGenres().containsAll(genres) &&
+              !movie.getCountriesBanned().contains(userCountry)) {
+            currentMoviesList.add(movie);
+          }
         }
       }
+    } else {
+        for (Movie movie : moviesDatabase) {
+          if (!movie.getCountriesBanned().contains(userCountry)) {
+           currentMoviesList.add(movie);
+          }
+        }
+    }
+
       if (currentAction.getFilters().getSort() != null) {
         if (currentAction.getFilters().getSort().getRating() != null) {
           Comparator<Movie> ratingMovieComparator = new RatingMovieComparator();
@@ -290,34 +286,166 @@ public final class PlatformActions {
           currentMoviesList.sort(durationMovieComparator);
         }
       }
-    }
 
     PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
     OutputHandler.updateOutput(SUCCESS_STATUS);
   }
 
   private static void buyTokens() {
+    if (!PlatformEngine.getEngine().getCurrentPage().equals(UPGRADES_PAGE)) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
+    int count = currentAction.getCount();
+    User currentUser = PlatformEngine.getEngine().getCurrentUser();
 
+    if (currentUser.getBalance() < count) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
+
+    currentUser.setBalance(currentUser.getBalance() - count);
+    currentUser.setTokensCount(currentUser.getTokensCount() + count);
   }
 
   private static void buyPremium() {
+    if (!PlatformEngine.getEngine().getCurrentPage().equals(UPGRADES_PAGE)) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
 
+    User currentUser = PlatformEngine.getEngine().getCurrentUser();
+
+    if (currentUser.getTokensCount() < PREMIUM_ACCOUNT_PRICE) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
+
+    if (currentUser.getAccountType().equals(PREMIUM_ACCOUNT)) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
+
+    currentUser.setAccountType(PREMIUM_ACCOUNT);
+    currentUser.setNumFreePremiumMovies(FREE_MOVIES);
+    currentUser.setTokensCount(currentUser.getTokensCount() - PREMIUM_ACCOUNT_PRICE);
   }
 
   private static void purchase() {
+    if (!PlatformEngine.getEngine().getCurrentPage().equals(SEE_DETAILS_PAGE)) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
 
+    User currentUser = PlatformEngine.getEngine().getCurrentUser();
+    Movie selectedMovie = PlatformEngine.getEngine().getCurrentMoviesList().get(0);
+
+    if (currentUser.getPurchasedMovies().contains(selectedMovie)) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
+
+    if (currentUser.getAccountType().equals(PREMIUM_ACCOUNT)) {
+      int numFreePremMovies = currentUser.getNumFreePremiumMovies();
+      numFreePremMovies--;
+      if (numFreePremMovies == 0)
+        currentUser.setAccountType(STANDARD_ACCOUNT);
+      currentUser.setNumFreePremiumMovies(numFreePremMovies);
+    } else {
+      if (currentUser.getTokensCount() < MOVIE_PRICE) {
+        OutputHandler.updateOutput(ERROR_STATUS);
+        return;
+      }
+
+      currentUser.setTokensCount(currentUser.getTokensCount() - MOVIE_PRICE);
+    }
+
+    ArrayList<Movie> purchasedMovies = currentUser.getPurchasedMovies();
+    purchasedMovies.add(selectedMovie);
+    currentUser.setPurchasedMovies(purchasedMovies);
+
+    OutputHandler.updateOutput(SUCCESS_STATUS);
   }
 
   private static void watch() {
+    if (!PlatformEngine.getEngine().getCurrentPage().equals(SEE_DETAILS_PAGE)) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
 
+    Movie selectedMovie = PlatformEngine.getEngine().getCurrentMoviesList().get(0);
+    User currentUser = PlatformEngine.getEngine().getCurrentUser();
+
+    if (!currentUser.getPurchasedMovies().contains(selectedMovie)) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
+
+    if (!currentUser.getWatchedMovies().contains(selectedMovie)) {
+      ArrayList<Movie> watchedMovies = currentUser.getWatchedMovies();
+      watchedMovies.add(selectedMovie);
+      currentUser.setWatchedMovies(watchedMovies);
+    }
+    OutputHandler.updateOutput(SUCCESS_STATUS);
   }
 
   private static void like() {
+    if (!PlatformEngine.getEngine().getCurrentPage().equals(SEE_DETAILS_PAGE)) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
 
+    Movie selectedMovie = PlatformEngine.getEngine().getCurrentMoviesList().get(0);
+    User currentUser = PlatformEngine.getEngine().getCurrentUser();
+
+    if (!currentUser.getPurchasedMovies().contains(selectedMovie)
+        || !currentUser.getWatchedMovies().contains(selectedMovie)) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
+
+    if (!currentUser.getLikedMovies().contains(selectedMovie)) {
+      ArrayList<Movie> likedMovies = currentUser.getLikedMovies();
+      likedMovies.add(selectedMovie);
+      currentUser.setLikedMovies(likedMovies);
+      selectedMovie.setNumLikes(selectedMovie.getNumLikes() + 1);
+    }
+    OutputHandler.updateOutput(SUCCESS_STATUS);
   }
 
   private static void rate() {
+    if (!PlatformEngine.getEngine().getCurrentPage().equals(SEE_DETAILS_PAGE)) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
 
+    User currentUser = PlatformEngine.getEngine().getCurrentUser();
+    Movie selectedMovie = PlatformEngine.getEngine().getCurrentMoviesList().get(0);
+
+    if (!currentUser.getPurchasedMovies().contains(selectedMovie)
+        || !currentUser.getWatchedMovies().contains(selectedMovie)) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
+
+    if (!currentUser.getRatedMovies().contains(selectedMovie)) {
+      ArrayList<Movie> ratedMovies = currentUser.getRatedMovies();
+      ratedMovies.add(selectedMovie);
+      currentUser.setRatedMovies(ratedMovies);
+
+      int ratingSum = 0;
+      ArrayList<Integer> ratings = selectedMovie.getRatings();
+      ratings.add(currentAction.getRate());
+
+      for (Integer rating : ratings) {
+        ratingSum += rating;
+      }
+
+      selectedMovie.setRatings(ratings);
+      selectedMovie.setNumRatings(selectedMovie.getNumRatings() + 1);
+      selectedMovie.setRating(ratingSum / selectedMovie.getNumRatings());
+    }
+    OutputHandler.updateOutput(SUCCESS_STATUS);
   }
 
   public static ActionInput getCurrentAction() {
