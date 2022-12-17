@@ -7,21 +7,26 @@ import input.CredentialsInput;
 import utils.OutputHandler;
 import utils.Utils;
 
-import static utils.Constants.*;
+import static utils.Constants.ERROR_STATUS;
+import static utils.Constants.LOGGED_IN_HOMEPAGE;
+import static utils.Constants.LOGGED_OUT_HOMEPAGE;
+import static utils.Constants.LOGIN_PAGE;
+import static utils.Constants.REGISTER_PAGE;
+import static utils.Constants.SUCCESS_STATUS;
 
-public final class LoginPage extends Page {
+public final class LoginPage implements Page {
 
   @Override
-  public void changePage(String nextPage) {
+  public void changePage(final String nextPage) {
     if (nextPage.equals(LOGGED_OUT_HOMEPAGE)) {
-      Page loggedOutHomepage = new LoggedOutHomepage();
-      PlatformEngine.getEngine().setCurrentPage(loggedOutHomepage);
+      PageFactory pageFactory = new PageFactory();
+      PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(LOGGED_OUT_HOMEPAGE));
       return;
     }
 
     if (nextPage.equals(REGISTER_PAGE)) {
-      Page registerPage = new RegisterPage();
-      PlatformEngine.getEngine().setCurrentPage(registerPage);
+      PageFactory pageFactory = new PageFactory();
+      PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(REGISTER_PAGE));
       return;
     }
 
@@ -44,7 +49,9 @@ public final class LoginPage extends Page {
     }
 
     PlatformEngine.getEngine().setCurrentUser(loginUser);
-    PlatformEngine.getEngine().setCurrentPage(new LoggedInHomepage());
+
+    PageFactory pageFactory = new PageFactory();
+    PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(LOGGED_IN_HOMEPAGE));
 
     OutputHandler.updateOutput(SUCCESS_STATUS);
   }

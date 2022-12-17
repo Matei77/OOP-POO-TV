@@ -4,86 +4,89 @@ import utils.OutputHandler;
 
 import static utils.Constants.ERROR_STATUS;
 
-public class Page {
-  public void changePage(String nextPage) {
-    OutputHandler.updateOutput(ERROR_STATUS);
-  }
-
+public interface Page {
 
   /**
-   *
+   * @param nextPage the page to go to
    */
-  public void login() {
+  default void changePage(String nextPage) {
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 
   /**
    *
    */
-  public void register() {
+  default void login() {
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 
   /**
    *
    */
-  public void search() {
+  default void register() {
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 
   /**
    *
    */
-  public void filter() {
+  default void search() {
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 
   /**
    *
    */
-  public void purchase() {
+  default void filter() {
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 
   /**
    *
    */
-  public void watch() {
+  default void purchase() {
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 
   /**
    *
    */
-  public void like() {
+  default void watch() {
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 
   /**
    *
    */
-  public void rate() {
+  default void like() {
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 
   /**
    *
    */
-  public void buyPremium() {
+  default void rate() {
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 
   /**
    *
    */
-  public void buyTokens() {
+  default void buyPremium() {
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 
   /**
    *
    */
-  public void logout() {
+  default void buyTokens() {
+    OutputHandler.updateOutput(ERROR_STATUS);
+  }
+
+  /**
+   *
+   */
+  default void logout() {
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 }

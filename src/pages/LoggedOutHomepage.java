@@ -3,20 +3,23 @@ package pages;
 import engine.PlatformEngine;
 import utils.OutputHandler;
 
-import static utils.Constants.*;
+import static utils.Constants.ERROR_STATUS;
+import static utils.Constants.LOGGED_OUT_HOMEPAGE;
+import static utils.Constants.LOGIN_PAGE;
+import static utils.Constants.REGISTER_PAGE;
 
-public final class LoggedOutHomepage extends Page {
+public final class LoggedOutHomepage implements Page {
   @Override
   public void changePage(final String nextPage) {
     if (nextPage.equals(LOGIN_PAGE)) {
-      Page loginPage = new LoginPage();
-      PlatformEngine.getEngine().setCurrentPage(loginPage);
+      PageFactory pageFactory = new PageFactory();
+      PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(LOGIN_PAGE));
       return;
     }
 
     if (nextPage.equals(REGISTER_PAGE)) {
-      Page registerPage = new RegisterPage();
-      PlatformEngine.getEngine().setCurrentPage(registerPage);
+      PageFactory pageFactory = new PageFactory();
+      PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(REGISTER_PAGE));
       return;
     }
 

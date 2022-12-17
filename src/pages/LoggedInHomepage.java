@@ -6,11 +6,19 @@ import utils.OutputHandler;
 
 import java.util.ArrayList;
 
-import static utils.Constants.*;
 import static utils.Constants.ERROR_STATUS;
+import static utils.Constants.LOGGED_IN_HOMEPAGE;
+import static utils.Constants.LOGGED_OUT_HOMEPAGE;
+import static utils.Constants.LOGOUT_PAGE;
+import static utils.Constants.MOVIES_PAGE;
+import static utils.Constants.SUCCESS_STATUS;
+import static utils.Constants.UPGRADES_PAGE;
 
-public class LoggedInHomepage extends Page {
+public class LoggedInHomepage implements Page {
 
+  /**
+   * @param nextPage the page to go to
+   */
   @Override
   public void changePage(final String nextPage) {
     if (nextPage.equals(MOVIES_PAGE)) {
@@ -19,8 +27,8 @@ public class LoggedInHomepage extends Page {
     }
 
     if (nextPage.equals(UPGRADES_PAGE)) {
-      Page upgradesPage = new UpgradesPage();
-      PlatformEngine.getEngine().setCurrentPage(upgradesPage);
+      PageFactory pageFactory = new PageFactory();
+      PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(UPGRADES_PAGE));
       return;
     }
 
@@ -36,6 +44,9 @@ public class LoggedInHomepage extends Page {
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 
+  /**
+   *
+   */
   @Override
   public void logout() {
 
@@ -44,9 +55,14 @@ public class LoggedInHomepage extends Page {
     PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
 
     PlatformEngine.getEngine().setCurrentUser(null);
-    PlatformEngine.getEngine().setCurrentPage(new LoggedOutHomepage());
+
+    PageFactory pageFactory = new PageFactory();
+    PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(LOGGED_OUT_HOMEPAGE));
   }
 
+  /**
+   *
+   */
   public void gotoMovies() {
     ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
     currentMoviesList.clear();
@@ -62,7 +78,8 @@ public class LoggedInHomepage extends Page {
 
     PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
 
-    PlatformEngine.getEngine().setCurrentPage(new MoviesPage());
+    PageFactory pageFactory = new PageFactory();
+    PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(MOVIES_PAGE));
     OutputHandler.updateOutput(SUCCESS_STATUS);
   }
 }

@@ -9,22 +9,26 @@ import utils.Utils;
 
 import java.util.ArrayList;
 
-import static utils.Constants.*;
 import static utils.Constants.ERROR_STATUS;
+import static utils.Constants.LOGGED_IN_HOMEPAGE;
+import static utils.Constants.LOGGED_OUT_HOMEPAGE;
+import static utils.Constants.LOGIN_PAGE;
+import static utils.Constants.REGISTER_PAGE;
+import static utils.Constants.SUCCESS_STATUS;
 
-public final class RegisterPage extends Page {
+public final class RegisterPage implements Page {
 
   @Override
-  public void changePage(String nextPage) {
+  public void changePage(final String nextPage) {
     if (nextPage.equals(LOGGED_OUT_HOMEPAGE)) {
-      Page loggedOutHomepage = new LoggedOutHomepage();
-      PlatformEngine.getEngine().setCurrentPage(loggedOutHomepage);
+      PageFactory pageFactory = new PageFactory();
+      PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(LOGGED_OUT_HOMEPAGE));
       return;
     }
 
     if (nextPage.equals(LOGIN_PAGE)) {
-      Page loginPage = new LoginPage();
-      PlatformEngine.getEngine().setCurrentPage(loginPage);
+      PageFactory pageFactory = new PageFactory();
+      PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(LOGIN_PAGE));
       return;
     }
 
@@ -57,7 +61,9 @@ public final class RegisterPage extends Page {
     // login the new user
     PlatformEngine.getEngine().setUsersDatabase(usersDatabase);
     PlatformEngine.getEngine().setCurrentUser(newUser);
-    PlatformEngine.getEngine().setCurrentPage(new LoggedInHomepage());
+
+    PageFactory pageFactory = new PageFactory();
+    PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(LOGGED_IN_HOMEPAGE));
 
     // output the success of the action
     OutputHandler.updateOutput(SUCCESS_STATUS);

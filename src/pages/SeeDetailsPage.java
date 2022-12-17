@@ -9,20 +9,30 @@ import utils.OutputHandler;
 
 import java.util.ArrayList;
 
-import static utils.Constants.*;
+import static utils.Constants.ERROR_STATUS;
+import static utils.Constants.LOGGED_IN_HOMEPAGE;
+import static utils.Constants.LOGOUT_PAGE;
+import static utils.Constants.MAX_RATING;
+import static utils.Constants.MIN_RATING;
+import static utils.Constants.MOVIES_PAGE;
+import static utils.Constants.MOVIE_PRICE;
+import static utils.Constants.PREMIUM_ACCOUNT;
+import static utils.Constants.SEE_DETAILS_PAGE;
+import static utils.Constants.SUCCESS_STATUS;
+import static utils.Constants.UPGRADES_PAGE;
 
 public final class SeeDetailsPage extends LoggedInHomepage {
   @Override
   public void changePage(final String nextPage) {
     if (nextPage.equals(LOGGED_IN_HOMEPAGE)) {
-      Page loggedInHomePage = new LoggedInHomepage();
-      PlatformEngine.getEngine().setCurrentPage(loggedInHomePage);
+      PageFactory pageFactory = new PageFactory();
+      PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(LOGGED_IN_HOMEPAGE));
       return;
     }
 
     if (nextPage.equals(UPGRADES_PAGE)) {
-      Page upgradesPage = new UpgradesPage();
-      PlatformEngine.getEngine().setCurrentPage(upgradesPage);
+      PageFactory pageFactory = new PageFactory();
+      PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(UPGRADES_PAGE));
       return;
     }
 

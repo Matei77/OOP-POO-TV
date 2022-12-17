@@ -12,15 +12,20 @@ import utils.comparators.RatingMovieComparator;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import static utils.Constants.*;
+import static utils.Constants.ERROR_STATUS;
+import static utils.Constants.LOGGED_IN_HOMEPAGE;
+import static utils.Constants.LOGOUT_PAGE;
+import static utils.Constants.MOVIES_PAGE;
+import static utils.Constants.SEE_DETAILS_PAGE;
+import static utils.Constants.SUCCESS_STATUS;
 
 public final class MoviesPage extends LoggedInHomepage {
 
   @Override
   public void changePage(final String nextPage) {
     if (nextPage.equals(LOGGED_IN_HOMEPAGE)) {
-      Page loggedInHomePage = new LoggedInHomepage();
-      PlatformEngine.getEngine().setCurrentPage(loggedInHomePage);
+      PageFactory pageFactory = new PageFactory();
+      PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(LOGGED_IN_HOMEPAGE));
       return;
     }
 
@@ -59,7 +64,9 @@ public final class MoviesPage extends LoggedInHomepage {
 
     PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
 
-    PlatformEngine.getEngine().setCurrentPage(new SeeDetailsPage());
+    PageFactory pageFactory = new PageFactory();
+    PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(SEE_DETAILS_PAGE));
+
     OutputHandler.updateOutput(SUCCESS_STATUS);
   }
 
