@@ -6,9 +6,9 @@
 ## Summary: ##
 
 **POO TV** implements the core backend mechanics of platforms like HBO GO 
-and Netflix using OOP concepts. The application receives a list of command
+and Netflix using OOP concepts. The application receives a list of actions
 from a file in _json_ format and generates a new _json_ file with the
-required output for each command.
+required output for each action.
 
 ## Implementation: ##
 
