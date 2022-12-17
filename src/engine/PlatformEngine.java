@@ -1,3 +1,5 @@
+/* Copyright Ionescu Matei-Stefan - 323CAb - 2022-2023 */
+
 package engine;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
