@@ -20,7 +20,7 @@ public final class Movie {
   private int numLikes = INITIAL_LIKES;
   private double rating = INITIAL_RATING;
   private int numRatings = INITIAL_NUM_RATINGS;
-  private ArrayList<Integer> ratings = new ArrayList<>();
+  private final ArrayList<Integer> ratings = new ArrayList<>();
 
 
   /**
@@ -133,11 +133,4 @@ public final class Movie {
     this.numRatings = numRatings;
   }
 
-  public ArrayList<Integer> getRatings() {
-    return ratings;
-  }
-
-  public void setRatings(final ArrayList<Integer> ratings) {
-    this.ratings = ratings;
-  }
 }

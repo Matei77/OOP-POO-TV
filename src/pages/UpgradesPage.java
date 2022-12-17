@@ -18,15 +18,16 @@ public final class UpgradesPage extends LoggedInHomepage {
       return;
     }
 
+    if (nextPage.equals(LOGOUT_PAGE)) {
+      logout();
+      return;
+    }
+
     if (nextPage.equals(MOVIES_PAGE)) {
       gotoMovies();
       return;
     }
 
-    if (nextPage.equals(LOGOUT_PAGE)) {
-      logout();
-      return;
-    }
 
     if (nextPage.equals(UPGRADES_PAGE)) {
       return;

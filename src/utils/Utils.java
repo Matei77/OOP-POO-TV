@@ -10,8 +10,6 @@ import pages.LoggedOutHomepage;
 
 import java.util.ArrayList;
 
-import static utils.Constants.LOGGED_OUT_HOMEPAGE;
-
 public final class Utils {
   private Utils() { }
 
