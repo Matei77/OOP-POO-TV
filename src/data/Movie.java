@@ -1,9 +1,14 @@
-package user;
+package data;
 
 import java.util.ArrayList;
 
-import static utils.Constants.*;
+import static utils.Constants.INITIAL_LIKES;
+import static utils.Constants.INITIAL_NUM_RATINGS;
+import static utils.Constants.INITIAL_RATING;
 
+/**
+ * Represents a movie.
+ */
 public final class Movie {
   private String name;
   private int year;
@@ -18,6 +23,16 @@ public final class Movie {
   private ArrayList<Integer> ratings = new ArrayList<>();
 
 
+  /**
+   * Constructor for new movie.
+   *
+   * @param name name of the movie
+   * @param year year of the movie realise
+   * @param duration duration of the movie
+   * @param genres list of movie genres
+   * @param actors list of actors in movie
+   * @param countriesBanned list countries the movie is banned in
+   */
   public Movie(final String name, final int year, final int duration,
                final ArrayList<String> genres, final ArrayList<String> actors,
                final ArrayList<String> countriesBanned) {

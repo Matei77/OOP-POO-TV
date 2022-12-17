@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import engine.PlatformEngine;
-import user.Movie;
-import user.User;
+import data.Movie;
+import data.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +17,16 @@ public final class OutputHandler {
   private OutputHandler() {
   }
 
+  /**
+   * Add the required data to the output.
+   *
+   * @param status -1 if an error should be thrown or positive value for success output
+   */
   public static void updateOutput(final int status) {
     ObjectMapper mapper = new ObjectMapper();
 
     ObjectNode outputNode = mapper.createObjectNode();
-    if (status == ERROR_STATUS) {
+    if (status <= ERROR_STATUS) {
       outputNode.put("error", "Error");
       outputNode.set("currentUser", null);
       outputNode.set("currentMoviesList", new ArrayNode(null));

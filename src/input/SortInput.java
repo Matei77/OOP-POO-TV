@@ -1,4 +1,4 @@
-package inputHandler;
+package input;
 
 public final class SortInput {
   private String rating;

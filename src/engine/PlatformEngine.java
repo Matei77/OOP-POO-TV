@@ -1,17 +1,18 @@
 package engine;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import inputHandler.ActionInput;
-import inputHandler.Input;
-import user.Movie;
-import user.User;
+import input.Input;
+import data.Movie;
+import data.User;
 import utils.Utils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-import static utils.Constants.LOGGED_OUT_HOMEPAGE;
 
+/**
+ * Contains the core elements of the platform. Implemented using the Singleton Design Pattern to
+ * only allow one instantiation of the class.
+ */
 public final class PlatformEngine {
   private static PlatformEngine instance = null;
 
@@ -28,6 +29,9 @@ public final class PlatformEngine {
 
   private PlatformEngine() { }
 
+  /**
+   * @return the PlatformEngine instance
+   */
   public static PlatformEngine getEngine() {
     if (instance == null) {
       instance = new PlatformEngine();
@@ -35,6 +39,9 @@ public final class PlatformEngine {
     return instance;
   }
 
+  /**
+   * Initialize the engine and execute all the actions.
+   */
   public void runEngine() {
     Utils.setStartingState();
     Utils.setDatabases();

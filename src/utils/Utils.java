@@ -1,11 +1,11 @@
 package utils;
 
 import engine.PlatformEngine;
-import inputHandler.Input;
-import inputHandler.MovieInput;
-import inputHandler.UserInput;
-import user.Movie;
-import user.User;
+import input.Input;
+import input.MovieInput;
+import input.UserInput;
+import data.Movie;
+import data.User;
 
 import java.util.ArrayList;
 
@@ -14,9 +14,23 @@ import static utils.Constants.LOGGED_OUT_HOMEPAGE;
 public final class Utils {
   private Utils() { }
 
+  /**
+   * Set the starting state of the engine.
+   */
+  public static void setStartingState() {
+    ArrayList<Movie> currentMoviesList = new ArrayList<>();
+    PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
+    PlatformEngine.getEngine().setCurrentPage(LOGGED_OUT_HOMEPAGE);
+    PlatformEngine.getEngine().setCurrentUser(null);
+  }
+
+  /**
+   * Set the databases for users and movies in the engine.
+   */
   public static void setDatabases() {
     Input inputData = PlatformEngine.getEngine().getInputData();
 
+    // create users database
     ArrayList<User> usersDatabase = new ArrayList<>();
     ArrayList<UserInput> inputUsers = inputData.getUsers();
     for (UserInput inputUser : inputUsers) {
@@ -26,6 +40,7 @@ public final class Utils {
       usersDatabase.add(user);
     }
 
+    // create movies database
     ArrayList<Movie> moviesDatabase = new ArrayList<>();
     ArrayList<MovieInput> inputMovies = inputData.getMovies();
     for (MovieInput inputMovie : inputMovies) {
@@ -34,15 +49,22 @@ public final class Utils {
       moviesDatabase.add(movie);
     }
 
+    // add databases to engine
     PlatformEngine.getEngine().setUsersDatabase(usersDatabase);
     PlatformEngine.getEngine().setMoviesDatabase(moviesDatabase);
   }
 
-  public static Movie findMovie(final String selectedMovieName) {
+  /**
+   * Search a movie by name in the database.
+   *
+   * @param movieName the name of the movie searched
+   * @return the Movie instance from the database if found or null otherwise
+   */
+  public static Movie findMovie(final String movieName) {
     ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
 
     for (Movie movie : currentMoviesList) {
-      if (movie.getName().equals(selectedMovieName)) {
+      if (movie.getName().equals(movieName)) {
         return movie;
       }
     }
@@ -50,18 +72,17 @@ public final class Utils {
     return null;
   }
 
-  public static void setStartingState() {
-    ArrayList<Movie> currentMoviesList = new ArrayList<>();
-    PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
-    PlatformEngine.getEngine().setCurrentPage(LOGGED_OUT_HOMEPAGE);
-    PlatformEngine.getEngine().setCurrentUser(null);
-  }
-
-  public static User findUser(final String name) {
+  /**
+   * Search a user by name in the database.
+   *
+   * @param userName the name of the user searched
+   * @return the User instance from the database if found or null otherwise
+   */
+  public static User findUser(final String userName) {
     ArrayList<User> usersDatabase = PlatformEngine.getEngine().getUsersDatabase();
 
     for (User user : usersDatabase) {
-      if (user.getName().equals(name)) {
+      if (user.getName().equals(userName)) {
         return user;
       }
     }

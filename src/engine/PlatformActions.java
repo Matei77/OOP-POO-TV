@@ -1,26 +1,59 @@
 package engine;
 
-import inputHandler.ActionInput;
-import inputHandler.CredentialsInput;
-import user.Movie;
-import user.User;
-import utils.DurationMovieComparator;
+import input.ActionInput;
+import input.CredentialsInput;
+import data.Movie;
+import data.User;
+import utils.comparators.DurationMovieComparator;
 import utils.OutputHandler;
-import utils.RatingMovieComparator;
+import utils.comparators.RatingMovieComparator;
 import utils.Utils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import static utils.Constants.*;
+import static utils.Constants.BUY_PREMIUM_ACCOUNT_FEATURE;
+import static utils.Constants.BUY_TOKENS_FEATURE;
+import static utils.Constants.CHANGE_PAGE;
+import static utils.Constants.ERROR_STATUS;
+import static utils.Constants.FILTER_FEATURE;
+import static utils.Constants.LIKE_FEATURE;
+import static utils.Constants.LOGGED_IN_HOMEPAGE;
+import static utils.Constants.LOGGED_OUT_HOMEPAGE;
+import static utils.Constants.LOGIN_FEATURE;
+import static utils.Constants.LOGIN_PAGE;
+import static utils.Constants.LOGOUT_PAGE;
+import static utils.Constants.MAX_RATING;
+import static utils.Constants.MIN_RATING;
+import static utils.Constants.MOVIES_PAGE;
+import static utils.Constants.MOVIE_PRICE;
+import static utils.Constants.ON_PAGE;
+import static utils.Constants.PREMIUM_ACCOUNT;
+import static utils.Constants.PREMIUM_ACCOUNT_PRICE;
+import static utils.Constants.PURCHASE_FEATURE;
+import static utils.Constants.RATE_FEATURE;
+import static utils.Constants.REGISTER_FEATURE;
+import static utils.Constants.REGISTER_PAGE;
+import static utils.Constants.SEARCH_FEATURE;
+import static utils.Constants.SEE_DETAILS_PAGE;
+import static utils.Constants.SUCCESS_STATUS;
+import static utils.Constants.UPGRADES_PAGE;
+import static utils.Constants.WATCH_FEATURE;
 
+/**
+ * Implements the actions that can be performed on the platform.
+ */
 public final class PlatformActions {
 
   private static ActionInput currentAction;
 
   private PlatformActions() { }
 
+  /**
+   * Executes the actions from the actions ArrayList.
+   *
+   * @param actions array list of the actions that need to be performed
+   */
   public static void executeActions(final ArrayList<ActionInput> actions) {
     for (ActionInput action : actions) {
       currentAction = action;
@@ -28,8 +61,10 @@ public final class PlatformActions {
       if (type.equals(CHANGE_PAGE)) {
         changePage();
       } else if (type.equals(ON_PAGE)) {
+
         String feature = action.getFeature();
-        switch(feature) {
+
+        switch (feature) {
           case LOGIN_FEATURE -> login();
           case REGISTER_FEATURE -> register();
           case SEARCH_FEATURE -> search();
@@ -43,7 +78,6 @@ public final class PlatformActions {
           default -> { }
         }
       }
-      // TODO execute actions
     }
   }
 
@@ -248,22 +282,22 @@ public final class PlatformActions {
         }
       } else if (actors == null) {
         for (Movie movie : moviesDatabase) {
-          if (movie.getGenres().containsAll(genres) &&
-              !movie.getCountriesBanned().contains(userCountry)) {
+          if (movie.getGenres().containsAll(genres)
+              && !movie.getCountriesBanned().contains(userCountry)) {
             currentMoviesList.add(movie);
           }
         }
       } else if (genres == null) {
         for (Movie movie : moviesDatabase) {
-          if (movie.getActors().containsAll(actors) &&
-              !movie.getCountriesBanned().contains(userCountry)) {
+          if (movie.getActors().containsAll(actors)
+              && !movie.getCountriesBanned().contains(userCountry)) {
             currentMoviesList.add(movie);
           }
         }
       } else {
         for (Movie movie : moviesDatabase) {
-          if (movie.getActors().containsAll(actors) && movie.getGenres().containsAll(genres) &&
-              !movie.getCountriesBanned().contains(userCountry)) {
+          if (movie.getActors().containsAll(actors) && movie.getGenres().containsAll(genres)
+              && !movie.getCountriesBanned().contains(userCountry)) {
             currentMoviesList.add(movie);
           }
         }
@@ -433,7 +467,7 @@ public final class PlatformActions {
       return;
     }
 
-    if (currentAction.getRate() > 5 || currentAction.getRate() < 1) {
+    if (currentAction.getRate() > MAX_RATING || currentAction.getRate() < MIN_RATING) {
       OutputHandler.updateOutput(ERROR_STATUS);
       return;
     }

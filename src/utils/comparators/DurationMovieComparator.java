@@ -1,13 +1,13 @@
-package utils;
+package utils.comparators;
 
 import engine.PlatformActions;
-import inputHandler.ActionInput;
-import inputHandler.SortInput;
-import user.Movie;
+import input.ActionInput;
+import input.SortInput;
+import data.Movie;
 
 import java.util.Comparator;
 
-public class DurationMovieComparator implements Comparator<Movie> {
+public final class DurationMovieComparator implements Comparator<Movie> {
 
   @Override
   public int compare(final Movie o1, final Movie o2) {

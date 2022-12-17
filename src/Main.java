@@ -2,17 +2,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import engine.PlatformEngine;
-import inputHandler.Input;
+import input.Input;
 
 import java.io.File;
 import java.io.IOException;
 
-public class Main {
-  public static void main(String[] args) throws IOException {
+public final class Main {
+  private Main() { }
+
+  /**
+   * Get the input file from the first arg and output the solution for it.
+   *
+   * @param args from the command line
+   * @throws IOException in case of exceptions to reading / writing
+   */
+  public static void main(final String[] args) throws IOException {
     String inputFile = args[0];
     outputSolution(inputFile, "results.out");
   }
 
+  /**
+   * Read the data from the inputFile and put the required output in the outputFile.
+   *
+   * @param inputFile JSON file to read from
+   * @param outputFile file to write results to
+   * @throws IOException in case of exceptions to reading / writing
+   */
   public static void outputSolution(final String inputFile, final String outputFile)
       throws IOException {
     ObjectMapper objectMapper = new ObjectMapper();

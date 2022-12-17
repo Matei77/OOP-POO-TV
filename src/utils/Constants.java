@@ -9,6 +9,8 @@ public final class Constants {
   public static final double INITIAL_RATING = 0.00;
   public static final int INITIAL_NUM_RATINGS = 0;
 
+  public static final int MAX_RATING = 5;
+  public static final int MIN_RATING = 1;
   public static final int PREMIUM_ACCOUNT_PRICE = 10;
   public static final int MOVIE_PRICE = 2;
 
