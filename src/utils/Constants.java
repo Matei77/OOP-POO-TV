@@ -6,7 +6,7 @@ public final class Constants {
   public static final int INITIAL_TOKENS = 0;
 
   public static final int INITIAL_LIKES = 0;
-  public static final int INITIAL_RATING = 0;
+  public static final double INITIAL_RATING = 0.00;
   public static final int INITIAL_NUM_RATINGS = 0;
 
   public static final int PREMIUM_ACCOUNT_PRICE = 10;

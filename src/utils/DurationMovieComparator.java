@@ -14,9 +14,9 @@ public class DurationMovieComparator implements Comparator<Movie> {
     ActionInput currentAction = PlatformActions.getCurrentAction();
     SortInput sort = currentAction.getFilters().getSort();
     if (sort.getDuration().equals("decreasing")) {
-      return Integer.compare(o1.getDuration(), o2.getDuration());
-    } else if (sort.getDuration().equals("increasing")) {
       return Integer.compare(o2.getDuration(), o1.getDuration());
+    } else if (sort.getDuration().equals("increasing")) {
+      return Integer.compare(o1.getDuration(), o2.getDuration());
     } else {
       return 0;
     }

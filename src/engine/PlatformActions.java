@@ -80,7 +80,8 @@ public final class PlatformActions {
         && !(nextPage.equals(MOVIES_PAGE) || nextPage.equals(UPGRADES_PAGE)))
 
         || (currentPage.equals(MOVIES_PAGE)
-        && !(nextPage.equals(LOGGED_IN_HOMEPAGE) || nextPage.equals(SEE_DETAILS_PAGE)))
+        && !(nextPage.equals(LOGGED_IN_HOMEPAGE) || nextPage.equals(SEE_DETAILS_PAGE)
+        || nextPage.equals(MOVIES_PAGE)))
 
         || (currentPage.equals(SEE_DETAILS_PAGE)
         && !(nextPage.equals(LOGGED_IN_HOMEPAGE) || nextPage.equals(MOVIES_PAGE)
@@ -327,7 +328,6 @@ public final class PlatformActions {
     }
 
     currentUser.setAccountType(PREMIUM_ACCOUNT);
-    currentUser.setNumFreePremiumMovies(FREE_MOVIES);
     currentUser.setTokensCount(currentUser.getTokensCount() - PREMIUM_ACCOUNT_PRICE);
   }
 
@@ -347,16 +347,21 @@ public final class PlatformActions {
 
     if (currentUser.getAccountType().equals(PREMIUM_ACCOUNT)) {
       int numFreePremMovies = currentUser.getNumFreePremiumMovies();
-      numFreePremMovies--;
-      if (numFreePremMovies == 0)
-        currentUser.setAccountType(STANDARD_ACCOUNT);
-      currentUser.setNumFreePremiumMovies(numFreePremMovies);
+      if (numFreePremMovies > 0) {
+        numFreePremMovies--;
+        currentUser.setNumFreePremiumMovies(numFreePremMovies);
+      } else {
+        if (currentUser.getTokensCount() < MOVIE_PRICE) {
+          OutputHandler.updateOutput(ERROR_STATUS);
+          return;
+        }
+        currentUser.setTokensCount(currentUser.getTokensCount() - MOVIE_PRICE);
+      }
     } else {
       if (currentUser.getTokensCount() < MOVIE_PRICE) {
         OutputHandler.updateOutput(ERROR_STATUS);
         return;
       }
-
       currentUser.setTokensCount(currentUser.getTokensCount() - MOVIE_PRICE);
     }
 
@@ -428,12 +433,18 @@ public final class PlatformActions {
       return;
     }
 
+    if (currentAction.getRate() > 5 || currentAction.getRate() < 1) {
+      OutputHandler.updateOutput(ERROR_STATUS);
+      return;
+    }
+
+
     if (!currentUser.getRatedMovies().contains(selectedMovie)) {
       ArrayList<Movie> ratedMovies = currentUser.getRatedMovies();
       ratedMovies.add(selectedMovie);
       currentUser.setRatedMovies(ratedMovies);
 
-      int ratingSum = 0;
+      double ratingSum = 0;
       ArrayList<Integer> ratings = selectedMovie.getRatings();
       ratings.add(currentAction.getRate());
 

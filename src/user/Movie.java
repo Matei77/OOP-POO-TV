@@ -13,7 +13,7 @@ public final class Movie {
   private ArrayList<String> countriesBanned;
 
   private int numLikes = INITIAL_LIKES;
-  private int rating = INITIAL_RATING;
+  private double rating = INITIAL_RATING;
   private int numRatings = INITIAL_NUM_RATINGS;
   private ArrayList<Integer> ratings = new ArrayList<>();
 
@@ -85,11 +85,11 @@ public final class Movie {
     this.numLikes = numLikes;
   }
 
-  public int getRating() {
+  public double getRating() {
     return rating;
   }
 
-  public void setRating(final int rating) {
+  public void setRating(final double rating) {
     this.rating = rating;
   }
 
