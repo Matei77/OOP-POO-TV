@@ -7,6 +7,9 @@ import data.Movie;
 
 import java.util.Comparator;
 
+/**
+ * Comparator for movie duration.
+ */
 public final class DurationMovieComparator implements Comparator<Movie> {
 
   @Override

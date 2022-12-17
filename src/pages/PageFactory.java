@@ -1,5 +1,13 @@
 package pages;
 
+import pages.pageTypes.LoggedInHomepage;
+import pages.pageTypes.LoggedOutHomepage;
+import pages.pageTypes.LoginPage;
+import pages.pageTypes.MoviesPage;
+import pages.pageTypes.RegisterPage;
+import pages.pageTypes.SeeDetailsPage;
+import pages.pageTypes.UpgradesPage;
+
 import static utils.Constants.LOGGED_IN_HOMEPAGE;
 import static utils.Constants.LOGGED_OUT_HOMEPAGE;
 import static utils.Constants.LOGIN_PAGE;
@@ -8,6 +16,9 @@ import static utils.Constants.REGISTER_PAGE;
 import static utils.Constants.SEE_DETAILS_PAGE;
 import static utils.Constants.UPGRADES_PAGE;
 
+/**
+ * Class that returns a new page of the selected type, using the Factory Design Pattern.
+ */
 public final class PageFactory {
 
   /**

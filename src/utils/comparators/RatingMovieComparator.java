@@ -7,6 +7,9 @@ import data.Movie;
 
 import java.util.Comparator;
 
+/**
+ * Comparator for movie rating.
+ */
 public final class RatingMovieComparator implements Comparator<Movie> {
 
   @Override

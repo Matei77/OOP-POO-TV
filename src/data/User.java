@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import static utils.Constants.FREE_MOVIES;
 import static utils.Constants.INITIAL_TOKENS;
 
+/**
+ * Represents a user.
+ */
 public final class User {
   private String name;
   private String password;
@@ -20,6 +23,15 @@ public final class User {
   private ArrayList<Movie> likedMovies;
   private ArrayList<Movie> ratedMovies;
 
+  /**
+   * Constructor for new user.
+   *
+   * @param name name of the user
+   * @param password user's password
+   * @param accountType the type of account (standard/premium)
+   * @param country the country the user is from
+   * @param balance the balance of the user
+   */
   public User(final String name, final String password, final String accountType,
               final String country, final int balance) {
     this.name = name;

@@ -24,8 +24,9 @@ public final class OutputHandler {
    */
   public static void updateOutput(final int status) {
     ObjectMapper mapper = new ObjectMapper();
-
     ObjectNode outputNode = mapper.createObjectNode();
+
+    // output the error
     if (status <= ERROR_STATUS) {
       outputNode.put("error", "Error");
       outputNode.set("currentUser", null);
@@ -38,6 +39,7 @@ public final class OutputHandler {
 
     outputNode.set("error", null);
 
+    // add current movies list to output
     ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
     ArrayNode currentMoviesOutput = mapper.createArrayNode();
 
@@ -47,17 +49,20 @@ public final class OutputHandler {
     }
     outputNode.set("currentMoviesList", currentMoviesOutput);
 
-
+    // add current user to output
     User currentUser = PlatformEngine.getEngine().getCurrentUser();
     ObjectNode currentUsersOutput = createUserOutput(mapper, currentUser);
 
     outputNode.set("currentUser", currentUsersOutput);
 
+    // update the final output
     ArrayNode output = PlatformEngine.getEngine().getOutput();
     output.addAll(List.of(outputNode));
   }
 
   private static ObjectNode createMovieOutput(final ObjectMapper mapper, final Movie movie) {
+
+    // create the output for a movie
     ObjectNode movieObjectNode = mapper.createObjectNode();
 
     movieObjectNode.put("name", movie.getName());
@@ -67,6 +72,7 @@ public final class OutputHandler {
     movieObjectNode.put("rating", movie.getRating());
     movieObjectNode.put("numRatings", movie.getNumRatings());
 
+    // add genres
     ArrayNode genresOutput = mapper.createArrayNode();
     ArrayList<String> genres = movie.getGenres();
     for (String genre : genres) {
@@ -74,6 +80,7 @@ public final class OutputHandler {
     }
     movieObjectNode.set("genres", genresOutput);
 
+    // add actors
     ArrayNode actorsOutput = mapper.createArrayNode();
     ArrayList<String> actors = movie.getActors();
     for (String actor : actors) {
@@ -81,6 +88,7 @@ public final class OutputHandler {
     }
     movieObjectNode.set("actors", actorsOutput);
 
+    // add countries banned
     ArrayNode countriesBannedOutput = mapper.createArrayNode();
     ArrayList<String> countriesBanned = movie.getCountriesBanned();
     for (String country : countriesBanned) {
@@ -88,16 +96,19 @@ public final class OutputHandler {
     }
     movieObjectNode.set("countriesBanned", countriesBannedOutput);
 
+    // return the created movieObjectNode
     return movieObjectNode;
   }
 
   private static ObjectNode createUserOutput(final ObjectMapper mapper, final User user) {
 
+    // create the output for a user
     ObjectNode userObjectNode = mapper.createObjectNode();
     if (user == null) {
       return null;
     }
 
+    // add user credentials
     ObjectNode credentialsObjectNode = mapper.createObjectNode();
     credentialsObjectNode.put("name", user.getName());
     credentialsObjectNode.put("password", user.getPassword());
@@ -110,6 +121,7 @@ public final class OutputHandler {
     userObjectNode.put("tokensCount", user.getTokensCount());
     userObjectNode.put("numFreePremiumMovies", user.getNumFreePremiumMovies());
 
+    // add purchased movies
     ArrayNode purchasedMoviesOutput = mapper.createArrayNode();
     ArrayList<Movie> purchasedMovies = user.getPurchasedMovies();
     for (Movie movie : purchasedMovies) {
@@ -118,6 +130,7 @@ public final class OutputHandler {
     }
     userObjectNode.set("purchasedMovies", purchasedMoviesOutput);
 
+    // add watched movies
     ArrayNode watchedMoviesOutput = mapper.createArrayNode();
     ArrayList<Movie> watchedMovies = user.getWatchedMovies();
     for (Movie movie : watchedMovies) {
@@ -126,6 +139,7 @@ public final class OutputHandler {
     }
     userObjectNode.set("watchedMovies", watchedMoviesOutput);
 
+    // add liked movies
     ArrayNode likedMoviesOutput = mapper.createArrayNode();
     ArrayList<Movie> likedMovies = user.getLikedMovies();
     for (Movie movie : likedMovies) {
@@ -134,6 +148,7 @@ public final class OutputHandler {
     }
     userObjectNode.set("likedMovies", likedMoviesOutput);
 
+    // add rated movies
     ArrayNode ratedMoviesOutput = mapper.createArrayNode();
     ArrayList<Movie> ratedMovies = user.getRatedMovies();
     for (Movie movie : ratedMovies) {
@@ -142,6 +157,7 @@ public final class OutputHandler {
     }
     userObjectNode.set("ratedMovies", ratedMoviesOutput);
 
+    // return the created userObjectNode
     return userObjectNode;
   }
 }

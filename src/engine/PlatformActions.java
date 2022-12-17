@@ -19,7 +19,7 @@ import static utils.Constants.SEARCH_FEATURE;
 import static utils.Constants.WATCH_FEATURE;
 
 /**
- * Implements the actions that can be performed on the platform.
+ * Implements the execution of actions that can be performed on the platform.
  */
 public final class PlatformActions {
 

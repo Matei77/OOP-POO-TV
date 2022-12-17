@@ -6,7 +6,7 @@ import input.MovieInput;
 import input.UserInput;
 import data.Movie;
 import data.User;
-import pages.LoggedOutHomepage;
+import pages.pageTypes.LoggedOutHomepage;
 
 import java.util.ArrayList;
 

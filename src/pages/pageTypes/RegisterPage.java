@@ -1,9 +1,11 @@
-package pages;
+package pages.pageTypes;
 
 import data.User;
 import engine.PlatformActions;
 import engine.PlatformEngine;
 import input.CredentialsInput;
+import pages.Page;
+import pages.PageFactory;
 import utils.OutputHandler;
 import utils.Utils;
 
@@ -20,6 +22,8 @@ public final class RegisterPage implements Page {
 
   @Override
   public void changePage(final String nextPage) {
+
+    // change page according to its type
     if (nextPage.equals(LOGGED_OUT_HOMEPAGE)) {
       PageFactory pageFactory = new PageFactory();
       PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(LOGGED_OUT_HOMEPAGE));
@@ -36,6 +40,7 @@ public final class RegisterPage implements Page {
       return;
     }
 
+    // output in case of error
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 

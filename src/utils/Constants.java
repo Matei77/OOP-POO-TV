@@ -1,7 +1,9 @@
 package utils;
 
+/**
+ * Incorporates all constants used in the platform's implementation.
+ */
 public final class Constants {
-
   public static final int FREE_MOVIES  = 15;
   public static final int INITIAL_TOKENS = 0;
 

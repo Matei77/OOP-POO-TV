@@ -1,9 +1,10 @@
-package pages;
+package pages.pageTypes;
 
 import data.Movie;
 import engine.PlatformActions;
 import engine.PlatformEngine;
 import input.ActionInput;
+import pages.PageFactory;
 import utils.OutputHandler;
 import utils.Utils;
 import utils.comparators.DurationMovieComparator;
@@ -23,6 +24,8 @@ public final class MoviesPage extends LoggedInHomepage {
 
   @Override
   public void changePage(final String nextPage) {
+
+    // change page according to its type
     if (nextPage.equals(LOGGED_IN_HOMEPAGE)) {
       PageFactory pageFactory = new PageFactory();
       PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(LOGGED_IN_HOMEPAGE));
@@ -44,6 +47,7 @@ public final class MoviesPage extends LoggedInHomepage {
       return;
     }
 
+    // output in case of error
     OutputHandler.updateOutput(ERROR_STATUS);
   }
 
@@ -56,25 +60,28 @@ public final class MoviesPage extends LoggedInHomepage {
       return;
     }
 
-    // update the currentMoviesList and the current page
+    // update the currentMoviesList
     ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
-
     currentMoviesList.clear();
     currentMoviesList.add(selectedMovie);
 
     PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
 
+    // update the current page
     PageFactory pageFactory = new PageFactory();
     PlatformEngine.getEngine().setCurrentPage(pageFactory.getPage(SEE_DETAILS_PAGE));
 
+    // output results
     OutputHandler.updateOutput(SUCCESS_STATUS);
   }
 
   @Override
   public void search() {
+    // reset the currentMoviesList
     ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
     currentMoviesList.clear();
 
+    // add the movies that start with the selected string
     String startsWith = PlatformActions.getCurrentAction().getStartsWith();
 
     ArrayList<Movie> moviesDatabase = PlatformEngine.getEngine().getMoviesDatabase();
@@ -87,15 +94,20 @@ public final class MoviesPage extends LoggedInHomepage {
       }
     }
 
+    // update the currentMoviesList
     PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
+
+    // output results
     OutputHandler.updateOutput(SUCCESS_STATUS);
   }
 
   @Override
   public void filter() {
+    // reset the currentMoviesList
     ArrayList<Movie> currentMoviesList = PlatformEngine.getEngine().getCurrentMoviesList();
     currentMoviesList.clear();
 
+    // add the movies that match the filters
     ArrayList<Movie> moviesDatabase = PlatformEngine.getEngine().getMoviesDatabase();
     String userCountry = PlatformEngine.getEngine().getCurrentUser().getCountry();
 
@@ -141,6 +153,7 @@ public final class MoviesPage extends LoggedInHomepage {
       }
     }
 
+    // sort the results according to the user preference
     if (currentAction.getFilters().getSort() != null) {
       if (currentAction.getFilters().getSort().getRating() != null) {
         Comparator<Movie> ratingMovieComparator = new RatingMovieComparator();
@@ -153,7 +166,10 @@ public final class MoviesPage extends LoggedInHomepage {
       }
     }
 
+    // update the list of movies the user can see on the screen
     PlatformEngine.getEngine().setCurrentMoviesList(currentMoviesList);
+
+    // output results
     OutputHandler.updateOutput(SUCCESS_STATUS);
   }
 }
